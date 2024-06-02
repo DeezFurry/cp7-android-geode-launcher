@@ -36,6 +36,20 @@ object GamePackageUtils {
         return game.versionName
     }
 
+    private val gameVersionMap = mapOf(
+        37L to "2.200",
+        38L to "2.205",
+        39L to "2.206"
+    )
+
+    /**
+     * Gets the version name that more closely aligns to the Windows/macOS releases
+     */
+    fun getUnifiedVersionName(packageManager: PackageManager): String {
+        val versionCode = getGameVersionCode(packageManager)
+        return gameVersionMap[versionCode] ?: getGameVersionString(packageManager)
+    }
+
     fun detectAbiMismatch(context: Context, packageInfo: PackageInfo, loadException: Error): Boolean {
         val abi = LaunchUtils.applicationArchitecture
         val isExtracted =

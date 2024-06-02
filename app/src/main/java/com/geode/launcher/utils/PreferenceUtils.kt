@@ -123,7 +123,6 @@ class PreferenceUtils(private val sharedPreferences: SharedPreferences) {
     }
 
     enum class Key {
-        LOAD_TESTING,
         LOAD_AUTOMATICALLY,
         UPDATE_AUTOMATICALLY,
         RELEASE_CHANNEL,
@@ -135,14 +134,14 @@ class PreferenceUtils(private val sharedPreferences: SharedPreferences) {
         LAST_DISMISSED_UPDATE,
         DISMISSED_GJ_UPDATE,
         LAUNCH_ARGUMENTS,
-        IGNORE_LOAD_FAILURE,
         LIMIT_ASPECT_RATIO,
-        DISPLAY_MODE
+        DISPLAY_MODE,
+        FORCE_HRR
     }
 
     private fun defaultValueForBooleanKey(key: Key): Boolean {
         return when (key) {
-            Key.UPDATE_AUTOMATICALLY -> true
+            Key.UPDATE_AUTOMATICALLY, Key.FORCE_HRR -> true
             Key.RELEASE_CHANNEL -> BuildConfig.DEBUG
             else -> false
         }
@@ -155,7 +154,6 @@ class PreferenceUtils(private val sharedPreferences: SharedPreferences) {
 
     private fun keyToName(key: Key): String {
         return when (key) {
-            Key.LOAD_TESTING -> "PreferenceLoadTesting"
             Key.LOAD_AUTOMATICALLY -> "PreferenceLoadAutomatically"
             Key.UPDATE_AUTOMATICALLY -> "PreferenceUpdateAutomatically"
             Key.RELEASE_CHANNEL -> "PreferenceReleaseChannel"
@@ -167,9 +165,9 @@ class PreferenceUtils(private val sharedPreferences: SharedPreferences) {
             Key.LAST_DISMISSED_UPDATE -> "PreferenceLastDismissedUpdate"
             Key.DISMISSED_GJ_UPDATE -> "PreferenceDismissedGJUpdate"
             Key.LAUNCH_ARGUMENTS -> "PreferenceLaunchArguments"
-            Key.IGNORE_LOAD_FAILURE -> "PreferenceIgnoreLoadFailure"
             Key.LIMIT_ASPECT_RATIO -> "PreferenceLimitAspectRatio"
             Key.DISPLAY_MODE -> "PreferenceDisplayMode"
+            Key.FORCE_HRR -> "PreferenceForceHighRefreshRate"
         }
     }
 

@@ -54,20 +54,37 @@ object GeodeUtils {
                     selectFileCallback(path)
                     return@registerForActivityResult
                 }
+
+                Toast.makeText(activity, R.string.file_select_error, Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                Toast.makeText(activity, R.string.no_file_selected, Toast.LENGTH_SHORT)
+                    .show()
             }
+
             failedCallback()
         }
         openDirectoryResultLauncher = activity.registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) {
             if (it != null) {
                 val path = FileUtils.getRealPathFromURI(activity, it)
-                if (path != null)
+                if (path != null) {
                     selectFileCallback(path)
-                return@registerForActivityResult
+                    return@registerForActivityResult
+                }
+
+                Toast.makeText(activity, R.string.file_select_error, Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                Toast.makeText(activity, R.string.no_file_selected, Toast.LENGTH_SHORT)
+                    .show()
             }
             failedCallback()
         }
         openFilesResultLauncher = activity.registerForActivityResult(GeodeOpenFilesActivityResult()) { result ->
             if (result.isEmpty()) {
+                Toast.makeText(activity, R.string.no_file_selected, Toast.LENGTH_SHORT)
+                    .show()
+
                 failedCallback()
                 return@registerForActivityResult
             }
@@ -88,6 +105,12 @@ object GeodeUtils {
                     selectFileCallback(path)
                     return@registerForActivityResult
                 }
+
+                Toast.makeText(activity, R.string.file_select_error, Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                Toast.makeText(activity, R.string.no_file_selected, Toast.LENGTH_SHORT)
+                    .show()
             }
             failedCallback()
         }
@@ -359,8 +382,7 @@ object GeodeUtils {
     fun getGameVersion(): String {
         // these versions should be aligned to windows releases, not what android says
         activity.get()?.run {
-            val versionCode = GamePackageUtils.getGameVersionCode(packageManager)
-            return gameVersionMap[versionCode] ?: GamePackageUtils.getGameVersionString(packageManager)
+            return GamePackageUtils.getUnifiedVersionName(packageManager)
         }
 
         return ""
@@ -451,6 +473,7 @@ object GeodeUtils {
     }
 
     const val CAPABILITY_EXTENDED_INPUT = "extended_input"
+    const val CAPABILITY_TIMESTAMP_INPUT = "timestamp_inputs"
 
     private var capabilityListener: WeakReference<CapabilityListener?> = WeakReference(null)
 
@@ -471,4 +494,7 @@ object GeodeUtils {
     external fun nativeKeyDown(keyCode: Int, modifiers: Int, isRepeating: Boolean)
     external fun nativeActionScroll(scrollX: Float, scrollY: Float)
     external fun resizeSurface(width: Int, height: Int)
+
+    // represents the timestamp of the next input callback, in nanoseconds (most events don't send it, but it's there)
+    external fun setNextInputTimestamp(timestamp: Long)
 }

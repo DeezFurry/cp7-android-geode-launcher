@@ -59,6 +59,7 @@ class GeometryDashActivity : AppCompatActivity(), Cocos2dxHelper.Cocos2dxHelperL
     private var mReceiver: BroadcastReceiver? = null
 
     private var displayMode = DisplayMode.DEFAULT
+    private var forceRefreshRate = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setupUIState()
@@ -152,12 +153,9 @@ class GeometryDashActivity : AppCompatActivity(), Cocos2dxHelper.Cocos2dxHelperL
     private fun handleGeodeException(e: Throwable) {
         e.printStackTrace()
 
-        val ignoreFailure = PreferenceUtils.get(this)
-            .getBoolean(PreferenceUtils.Key.IGNORE_LOAD_FAILURE)
-
-        if (ignoreFailure) {
-            Log.w("GeodeLauncher", "could not load Geode object!")
-        } else {
+        // ignore load failures if the game is newer than what's supported
+        // so people in the future can use their save data
+        if (GamePackageUtils.getGameVersionCode(packageManager) <= Constants.SUPPORTED_VERSION_CODE) {
             throw e
         }
     }
@@ -362,6 +360,7 @@ class GeometryDashActivity : AppCompatActivity(), Cocos2dxHelper.Cocos2dxHelperL
         this.mGLSurfaceView = glSurfaceView
         frameLayout.addView(this.mGLSurfaceView)
 
+        glSurfaceView.setEGLContextClientVersion(2)
         glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8)
 
         if (isAndroidEmulator()) {
@@ -369,7 +368,13 @@ class GeometryDashActivity : AppCompatActivity(), Cocos2dxHelper.Cocos2dxHelperL
         }
 
         glSurfaceView.initView()
-        glSurfaceView.setCocos2dxRenderer(Cocos2dxRenderer())
+
+        val renderer = Cocos2dxRenderer(glSurfaceView)
+        glSurfaceView.setCocos2dxRenderer(renderer)
+
+        if (forceRefreshRate) {
+            renderer.setFrameRate = true
+        }
 
         editText.inputType = 145
         glSurfaceView.cocos2dxEditText = editText
@@ -383,6 +388,8 @@ class GeometryDashActivity : AppCompatActivity(), Cocos2dxHelper.Cocos2dxHelperL
         displayMode = DisplayMode.fromInt(
             PreferenceUtils.get(this).getInt(PreferenceUtils.Key.DISPLAY_MODE)
         )
+
+        forceRefreshRate = PreferenceUtils.get(this).getBoolean(PreferenceUtils.Key.FORCE_HRR)
 
         if (displayMode == DisplayMode.FULLSCREEN && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
@@ -514,12 +521,17 @@ class GeometryDashActivity : AppCompatActivity(), Cocos2dxHelper.Cocos2dxHelperL
     }
 
     override fun onCapabilityAdded(capability: String): Boolean {
-        if (capability == GeodeUtils.CAPABILITY_EXTENDED_INPUT) {
-            mGLSurfaceView?.useKeyboardEvents = true
-            return true
+        return when (capability) {
+            GeodeUtils.CAPABILITY_EXTENDED_INPUT -> {
+                mGLSurfaceView?.useKeyboardEvents = true
+                true
+            }
+            GeodeUtils.CAPABILITY_TIMESTAMP_INPUT -> {
+                mGLSurfaceView?.sendTimestampEvents = true
+                true
+            }
+            else -> false
         }
-
-        return false
     }
 
     /**

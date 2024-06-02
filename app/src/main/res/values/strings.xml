@@ -11,10 +11,13 @@
     <string name="launcher_logo_alt">geode logo</string>
     <string name="launcher_launch_icon_alt">play icon</string>
     <string name="launcher_download_icon_alt">download icon</string>
+    <string name="launcher_download_game">Download Game</string>
+    <string name="launcher_download_32bit">Download the 32-bit version of launcher.</string>
+    <string name="launcher_download_universal">Download the non 32-bit version of launcher.</string>
     <string name="launcher_settings_icon_alt">settings icon</string>
     <string name="launcher_retry_icon_alt">retry icon</string>
     <string name="geode_download_title">Geode is not installed.</string>
-    <string name="game_outdated">A Geometry Dash update is required.</string>
+    <string name="game_outdated">A Geometry Dash update is required.\nYou currently have update %1$s.</string>
     <string name="geode_download_description">Geode is downloading. Please wait.</string>
     <plurals name="automatically_load_countdown">
         <item quantity="one">Automatically launching game in %1$d second.</item>
@@ -55,6 +58,7 @@
     <string name="release_fetch_cancelled">Update cancelled.</string>
     <string name="release_fetch_button_retry">Retry</string>
     <string name="release_fetch_button_cancel">Cancel</string>
+    <string name="release_fetch_try_later">Please try again later.</string>
     <string name="release_fetch_manual_check_required">Externally managed library in use, please manually check for updates if you want to overwrite it.</string>
 
     <!-- GeometryDashActivity strings -->
@@ -65,7 +69,7 @@
     <string name="load_failed_generic_error_description">Uncaught error during game load. Try to:</string>
     <string name="load_failed_crashed">Geode crashed</string>
     <string name="load_failed_crashed_description">A crash was reported during the last session. Try to:</string>
-    <string name="load_failed_recommendation_reinstall">Reinstall Geometry Dash from the Play Store.</string>
+    <string name="load_failed_recommendation_reinstall">Reinstall Geometry Dash.</string>
     <string name="load_failed_recommendation_switch_32bit_abi">Install the 32-bit version of the launcher.</string>
     <string name="load_failed_recommendation_switch_64bit_abi">Install the non 32-bit version of the launcher.</string>
     <string name="load_failed_recommendation_update">Verify that the latest versions of the launcher and Geometry Dash are installed.</string>
@@ -76,6 +80,8 @@
     <string name="message_box_accept">OK</string>
     <string name="message_box_continue">Continue</string>
     <string name="missing_permissions">Missing required permissions for this action!</string>
+    <string name="no_file_selected">File selection cancelled.</string>
+    <string name="file_select_error">Failed to get file.</string>
 
     <!-- SettingsActivity strings -->
     <string name="title_activity_settings">Settings</string>
@@ -85,7 +91,6 @@
     <string name="text_copied">Copied to clipboard.</string>
 
     <string name="preference_category_testing">General</string>
-    <string name="preference_load_testing_name">Load files from /test</string>
     <string name="preference_load_automatically_name">Automatically launch</string>
     <string name="preference_load_automatically_description">Launches the game after a short delay.</string>
     <string name="preferences_copy_external_button">Copy external files directory</string>
@@ -98,6 +103,7 @@
     <string name="preference_theme_light">Light</string>
     <string name="preference_theme_dark">Dark</string>
     <string name="preference_black_background_name">Black background in dark theme</string>
+    <string name="preference_force_hrr">Force maximum refresh rate</string>
 
     <string name="preference_display_mode_name">Screen scale</string>
     <string name="preference_display_mode_select">Select screen scale</string>
@@ -122,7 +128,6 @@
     <string name="preference_category_developer">Developer</string>
     <string name="preference_launch_arguments_name">Launch arguments</string>
     <string name="preference_launch_arguments_set_title">Set launch arguments</string>
-    <string name="preference_ignore_load_failure_name">Ignore loader errors</string>
     <string name="preference_text_clear">Clear</string>
 
     <!-- ApplicationLogsActivity strings -->
